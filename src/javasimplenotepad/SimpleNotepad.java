@@ -12,7 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.File;
-import java.nio.charset.StandardCharsets;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.event.UndoableEditEvent;
@@ -323,19 +322,17 @@ public class SimpleNotepad extends javax.swing.JFrame {
     }//GEN-LAST:event_menuRedoActionPerformed
 
     private void open() {
+        jTextArea1.setText("");
         final JFileChooser fc = new JFileChooser();
         fc.showOpenDialog(null);
         path = fc.getSelectedFile().getPath();
         try {
             InputStream is = new FileInputStream(path);
-            byte[] data = new byte[1024];
-            int i;
-
-            do {
-                i = is.read(data);
-                String word = new String(data, StandardCharsets.UTF_8);
-                jTextArea1.setText(word);
-            } while (i != -1);
+            int data = is.read();
+            while (data != -1) {
+                jTextArea1.append(""+ (char) data);
+                data = is.read();
+            }
 
             is.close();
             fileName = fc.getSelectedFile().getName();
