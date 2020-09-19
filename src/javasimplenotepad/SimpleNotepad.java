@@ -4,20 +4,6 @@
  * and open the template in the editor.
  */
 package javasimplenotepad;
-
-import java.awt.Color;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.JOptionPane;
-import javax.swing.event.UndoableEditEvent;
-import javax.swing.event.UndoableEditListener;
-import javax.swing.undo.UndoManager;
-
 /**
  *
  * @author thinkpad
@@ -27,22 +13,17 @@ public class SimpleNotepad extends javax.swing.JFrame {
     /**
      * Creates new form SimpleNotePad
      */
-    private String path;
-    private String fileName;
-    private Boolean lineWrap = true;
-    private UndoManager um = new UndoManager();
+    protected FunctionHelpMenu helpMenu = new FunctionHelpMenu();
+    protected FunctionColorMenu colorMenu = new FunctionColorMenu();
+    protected FunctionFormatMenu formatMenu = new FunctionFormatMenu();
+    protected FunctionEditMenu editMenu = new FunctionEditMenu();
+    protected FuntionFileMenu fileMenu = new FuntionFileMenu();
 
     public SimpleNotepad() {
         initComponents();
         this.setTitle("Simple Notepad");
-
-        jTextArea1.getDocument().addUndoableEditListener(
-                new UndoableEditListener() {
-            @Override
-            public void undoableEditHappened(UndoableEditEvent e) {
-                um.addEdit(e.getEdit());
-            }
-        });
+        editMenu.undoRedoTextAreaListener(jTextArea1);
+        fileMenu.exitWindoListener(this,jTextArea1);
     }
 
     /**
@@ -152,7 +133,7 @@ public class SimpleNotepad extends javax.swing.JFrame {
 
         jMenu4.setText("Format");
 
-        menuWordWrap.setText("Word Wrap : Enabled");
+        menuWordWrap.setText("Word Wrap : Disabled");
         menuWordWrap.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuWordWrapActionPerformed(evt);
@@ -213,174 +194,58 @@ public class SimpleNotepad extends javax.swing.JFrame {
 
     private void menuOpenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuOpenActionPerformed
         // TODO add your handling code here:
-        if (path != null) {
-            int result = JOptionPane.showConfirmDialog(this, "Do you want to save changes?", "Opening file", JOptionPane.YES_NO_OPTION);
-            switch (result) {
-                case JOptionPane.YES_OPTION:
-                    save();
-                    open();
-                    return;
-                case JOptionPane.NO_OPTION:
-                    open();
-            }
-        } else {
-            open();
-        }
+        fileMenu.doOpen(jTextArea1, this);
     }//GEN-LAST:event_menuOpenActionPerformed
 
     private void menuSaveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveActionPerformed
-        // TODO add your handling code here:
-        if (path != null) {
-            save();
-        } else {
-            saveAs();
-        }
+//        // TODO add your handling code here:
+        fileMenu.doSave(jTextArea1, this);
     }//GEN-LAST:event_menuSaveActionPerformed
 
     private void menuSaveAsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSaveAsActionPerformed
         // TODO add your handling code here:
-        saveAs();
+        fileMenu.saveAsFile(this, jTextArea1);
     }//GEN-LAST:event_menuSaveAsActionPerformed
 
     private void menuNewActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuNewActionPerformed
         // TODO add your handling code here:
-        if (path != null) {
-            int result = JOptionPane.showConfirmDialog(this, "Do you want to save changes?", "Creating new file", JOptionPane.YES_NO_OPTION);
-            switch (result) {
-                case JOptionPane.YES_OPTION:
-                    save();
-                    return;
-                case JOptionPane.NO_OPTION:
-                    jTextArea1.setText("");
-                    path = null;
-                    fileName = "New";
-                    this.setTitle(fileName);
-                    return;
-            }
-        } else {
-            jTextArea1.setText("");
-            path = null;
-            fileName = "New";
-            this.setTitle(fileName);
-        }
+        fileMenu.doNewFile(jTextArea1, this);
     }//GEN-LAST:event_menuNewActionPerformed
 
     private void menuExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuExitActionPerformed
         // TODO add your handling code here:
-        dispose();
+        fileMenu.exit(this, jTextArea1);
     }//GEN-LAST:event_menuExitActionPerformed
 
     private void menuAboutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuAboutActionPerformed
         // TODO add your handling code here:
-        JOptionPane.showMessageDialog(this, "A simple notepad with Java GUI.\n"
-                + "\n"
-                + "\n"
-                + "My Github : oktavianoandy\n"
-                + "Created with ❤ by Oktaviano Andy Suryadi.");
+        helpMenu.showAbout();
     }//GEN-LAST:event_menuAboutActionPerformed
 
     private void menuWordWrapActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuWordWrapActionPerformed
         // TODO add your handling code here:
-        if (lineWrap == true) {
-            menuWordWrap.setText("Word Wrap : Disabled");
-            lineWrap = false;
-            jTextArea1.setLineWrap(false);
-        } else {
-            menuWordWrap.setText("Word Wrap : Enabled");
-            lineWrap = true;
-            jTextArea1.setLineWrap(true);
-        }
+        formatMenu.changeWordWrapStatus(menuWordWrap, jTextArea1);
     }//GEN-LAST:event_menuWordWrapActionPerformed
 
     private void menuThemeLightActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuThemeLightActionPerformed
         // TODO add your handling code here:
-        jTextArea1.setBackground(Color.WHITE);
-        jTextArea1.setForeground(Color.BLACK);
-        jTextArea1.setCaretColor(Color.BLACK);
+        colorMenu.changeThemeToLight(jTextArea1);
     }//GEN-LAST:event_menuThemeLightActionPerformed
 
     private void menuThemeDarkActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuThemeDarkActionPerformed
         // TODO add your handling code here:
-        jTextArea1.setBackground(Color.DARK_GRAY);
-        jTextArea1.setForeground(Color.WHITE);
-        jTextArea1.setCaretColor(Color.WHITE);
+        colorMenu.changeThemeToDark(jTextArea1);
     }//GEN-LAST:event_menuThemeDarkActionPerformed
 
     private void menuUndoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUndoActionPerformed
         // TODO add your handling code here:
-        if (um.canUndo()) {
-            um.undo();
-        }
+        editMenu.undo();
     }//GEN-LAST:event_menuUndoActionPerformed
 
     private void menuRedoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuRedoActionPerformed
         // TODO add your handling code here:
-        if (um.canRedo()) {
-            um.redo();
-        }
-
+        editMenu.redo();
     }//GEN-LAST:event_menuRedoActionPerformed
-
-    private void open() {
-        jTextArea1.setText("");
-        final JFileChooser fc = new JFileChooser();
-        fc.showOpenDialog(null);
-        path = fc.getSelectedFile().getPath();
-        try {
-            InputStream is = new FileInputStream(path);
-            int data = is.read();
-            while (data != -1) {
-                jTextArea1.append(""+ (char) data);
-                data = is.read();
-            }
-
-            is.close();
-            fileName = fc.getSelectedFile().getName();
-            this.setTitle(fileName + " - Simple Notepad");
-
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, e);
-        }
-    }
-
-    private void saveAs() {
-        JFileChooser fc = new JFileChooser();
-        fc.setDialogTitle("Specify a file to save");
-        int userSelection = fc.showSaveDialog(jTextArea1);
-        if (userSelection == JFileChooser.APPROVE_OPTION) {
-            path = fc.getSelectedFile().getPath();
-            File fileToSave = fc.getSelectedFile();
-
-            fileName = fc.getSelectedFile().getName();
-            this.setTitle(fileName + " - Simple Notepad");
-
-            if (fileToSave.exists()) {
-                int result = JOptionPane.showConfirmDialog(this, "The file is already exists, overwrite?", "Existing file", JOptionPane.OK_CANCEL_OPTION);
-                switch (result) {
-                    case JOptionPane.YES_OPTION:
-                        save();
-                        return;
-                    case JOptionPane.CANCEL_OPTION:
-                        return;
-                }
-            } else {
-                save();
-            }
-        }
-    }
-
-    private void save() {
-        try {
-            OutputStream os = new FileOutputStream(path);
-            String word = jTextArea1.getText();
-            os.write(word.getBytes());
-            os.flush();
-            os.close();
-            JOptionPane.showMessageDialog(this, "Save successful");
-        } catch (IOException e) {
-            JOptionPane.showMessageDialog(this, e);
-        }
-    }
 
     /**
      * @param args the command line arguments

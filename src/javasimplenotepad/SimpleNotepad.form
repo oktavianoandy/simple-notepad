@@ -99,7 +99,7 @@
           <SubComponents>
             <MenuItem class="javax.swing.JMenuItem" name="menuWordWrap">
               <Properties>
-                <Property name="text" type="java.lang.String" value="Word Wrap : Enabled"/>
+                <Property name="text" type="java.lang.String" value="Word Wrap : Disabled"/>
               </Properties>
               <AccessibilityProperties>
                 <Property name="AccessibleContext.accessibleName" type="java.lang.String" value=""/>
