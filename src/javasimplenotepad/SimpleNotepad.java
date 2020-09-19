@@ -47,6 +47,9 @@ public class SimpleNotepad extends javax.swing.JFrame {
         jMenu2 = new javax.swing.JMenu();
         menuUndo = new javax.swing.JMenuItem();
         menuRedo = new javax.swing.JMenuItem();
+        menuCopy = new javax.swing.JMenuItem();
+        menuCut = new javax.swing.JMenuItem();
+        menuPaste = new javax.swing.JMenuItem();
         jMenu4 = new javax.swing.JMenu();
         menuWordWrap = new javax.swing.JMenuItem();
         jMenu5 = new javax.swing.JMenu();
@@ -128,6 +131,33 @@ public class SimpleNotepad extends javax.swing.JFrame {
             }
         });
         jMenu2.add(menuRedo);
+
+        menuCopy.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_C, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuCopy.setText("Copy");
+        menuCopy.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCopyActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuCopy);
+
+        menuCut.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_X, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuCut.setText("Cut");
+        menuCut.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuCutActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuCut);
+
+        menuPaste.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_V, java.awt.event.InputEvent.CTRL_DOWN_MASK));
+        menuPaste.setText("Paste");
+        menuPaste.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuPasteActionPerformed(evt);
+            }
+        });
+        jMenu2.add(menuPaste);
 
         jMenuBar1.add(jMenu2);
 
@@ -247,6 +277,21 @@ public class SimpleNotepad extends javax.swing.JFrame {
         editMenu.redo();
     }//GEN-LAST:event_menuRedoActionPerformed
 
+    private void menuCopyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCopyActionPerformed
+        // TODO add your handling code here:
+        editMenu.copy(jTextArea1);
+    }//GEN-LAST:event_menuCopyActionPerformed
+
+    private void menuCutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuCutActionPerformed
+        // TODO add your handling code here:
+        editMenu.cut(jTextArea1);
+    }//GEN-LAST:event_menuCutActionPerformed
+
+    private void menuPasteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPasteActionPerformed
+        // TODO add your handling code here:
+        editMenu.paste(jTextArea1);
+    }//GEN-LAST:event_menuPasteActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -293,9 +338,12 @@ public class SimpleNotepad extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JMenuItem menuAbout;
+    private javax.swing.JMenuItem menuCopy;
+    private javax.swing.JMenuItem menuCut;
     private javax.swing.JMenuItem menuExit;
     private javax.swing.JMenuItem menuNew;
     private javax.swing.JMenuItem menuOpen;
+    private javax.swing.JMenuItem menuPaste;
     private javax.swing.JMenuItem menuRedo;
     private javax.swing.JMenuItem menuSave;
     private javax.swing.JMenuItem menuSaveAs;

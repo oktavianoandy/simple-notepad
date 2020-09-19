@@ -39,4 +39,15 @@ public class FunctionEditMenu {
         }
     }
     
+    protected void copy(JTextArea textArea){
+        textArea.copy();
+    }
+    
+    protected void cut(JTextArea textArea){
+        textArea.cut();
+    }
+    
+    protected void paste(JTextArea textArea){
+        textArea.paste();
+    }
 }
