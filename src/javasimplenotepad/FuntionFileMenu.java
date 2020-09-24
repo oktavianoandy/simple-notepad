@@ -7,12 +7,12 @@ package javasimplenotepad;
 
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
@@ -56,18 +56,19 @@ public class FuntionFileMenu {
         if (userSelection == JFileChooser.APPROVE_OPTION) {
             path = fc.getSelectedFile().getPath();
             try {
-                InputStream is = new FileInputStream(path);
-                int data = is.read();
-                while (data != -1) {
-                    textArea.append("" + (char) data);
-                    data = is.read();
-                }
-                is.close();
+                String data;
+                FileReader fr = new FileReader(path);
+                BufferedReader br = new BufferedReader(fr);
+                do {
+                    data = br.readLine();
+                    textArea.append(data);
+                } while (data == null);
+                br.close();
                 fileName = fc.getSelectedFile().getName();
-                System.out.println(path);
                 changeAplicationName(jframe);
             } catch (IOException e) {
-                JOptionPane.showMessageDialog(null, e);
+                System.out.println(e);
+                JOptionPane.showMessageDialog(null, "Open file is failed!");
             }
         }
     }
@@ -90,14 +91,17 @@ public class FuntionFileMenu {
 
     protected void saveFile(JTextArea textArea, JFrame jframe) {
         try {
-            OutputStream os = new FileOutputStream(path);
+            FileWriter fw = new FileWriter(path);
+            BufferedWriter bw = new BufferedWriter(fw);
             String word = textArea.getText();
-            os.write(word.getBytes());
-            os.flush();
-            os.close();
-            JOptionPane.showMessageDialog(null, "Simpan berhasil!");
+            bw.write(word);
+            bw.flush();
+            bw.close();
+            JOptionPane.showMessageDialog(null, "Save success!");
             changeAplicationName(jframe);
-        } catch (Exception e) {
+        } catch (IOException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Save Failed!");
         }
     }
 
@@ -117,9 +121,7 @@ public class FuntionFileMenu {
                 switch (result) {
                     case JOptionPane.YES_OPTION:
                         saveFile(textArea, jframe);
-                        return;
                     case JOptionPane.CANCEL_OPTION:
-                        return;
                 }
             } else {
                 saveFile(textArea, jframe);
@@ -150,6 +152,7 @@ public class FuntionFileMenu {
 
     protected void exitWindoListener(JFrame jframe, JTextArea textArea) {
         jframe.addWindowListener(new WindowAdapter() {
+            @Override
             public void windowClosing(WindowEvent e) {
                 exit(jframe, textArea);
             }
