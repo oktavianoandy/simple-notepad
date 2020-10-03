@@ -59,10 +59,9 @@ public class FuntionFileMenu {
                 String data;
                 FileReader fr = new FileReader(path);
                 BufferedReader br = new BufferedReader(fr);
-                do {
-                    data = br.readLine();
-                    textArea.append(data);
-                } while (data == null);
+                while ((data = br.readLine()) != null){
+                    textArea.append(data + "\n");
+                }
                 br.close();
                 fileName = fc.getSelectedFile().getName();
                 changeAplicationName(jframe);
